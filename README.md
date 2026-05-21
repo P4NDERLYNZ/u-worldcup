@@ -1,44 +1,44 @@
-# U-WorldCup Prediction Web App 🏆
+# U-WorldCup
 
-เว็บแอปพลิเคชันสำหรับกิจกรรมทายผลสกอร์ฟุตบอลโลก ใช้งานง่าย ตอบโจทย์การเล่นร่วมกันในทีม มาพร้อมธีม Dark/Gold สุดพรีเมียม
+## Concept: World Cup Prediction & Question Tier Game
+A premium tier-based prediction system for football tournaments. Instead of simple score predictions, users answer a series of questions per match. Each question is categorized into Tiers (1, 2, 3) representing difficulty and points rewarded.
 
-## Features (ฟีเจอร์หลัก)
-- **Dashboard:** ดูสรุปสถิติและคะแนนรวม
-- **Matches:** ดูโปรแกรมการแข่งขันและส่งคำทายผล
-- **My Predictions:** ดูประวัติการทายผลและแต้มที่ได้รับ
-- **Leaderboard:** ตารางจัดอันดับผู้เล่น ใครแม่นสุดมาดูกัน
-- **Admin Dashboard:** จัดการสถานะการแข่งขัน ใส่ผลสกอร์จริง และคำนวณคะแนนใหม่
+## 🌟 Front Office Features
+- **Matches (Jadwal):** View available matches, their status (Open/Locked/Finished), and max points.
+- **Tier-based Prediction:** Answer questions for a match. Supports Multiple Choice and Text/Score Inputs.
+- **My Answers (Tiket):** Track your prediction history and real-time point rewards.
+- **Leaderboard (Klasemen):** Global ranking of players based on their total score.
 
-## Scoring Rule (กติกาการให้คะแนน)
-- **ทายผลสกอร์ถูกต้องเป๊ะ:** รับ 3 คะแนนเต็ม
-- **ทายผลแพ้/ชนะ/เสมอถูกต้อง แต่สกอร์ไม่ตรง:** รับ 1 คะแนน
-- **ทายผิด:** 0 คะแนน
+## ⚙️ Back Office Features (Admin Panel)
+- **Admin Dashboard:** Overview of total matches, questions, user answers, and total players.
+- **Match Management:** Create, update, and manage the status of matches.
+- **Question Management:** Create custom questions for each match with specific Tiers.
+- **Auto-Calculation:** Set the correct answer for a question and the system instantly evaluates all user answers and updates the leaderboard.
 
-## Tech Stack
-- React 18
-- Vite
-- Tailwind CSS v4
-- React Router DOM
-- Lucide React (Icons)
-- Context API (State Management)
+## 🎯 Tier Scoring Rule
+- **Tier 1 (Basic):** Simple questions (e.g., Match Winner). Reward: **1 Point**.
+- **Tier 2 (Smart Pick):** Moderate difficulty (e.g., Team to score first). Reward: **2 Points**.
+- **Tier 3 (Pro Guess):** High difficulty (e.g., Exact Full-Time Score). Reward: **3 Points**.
 
-## โครงสร้างโฟลเดอร์ (Folder Structure)
-- `/src/components`: UI Components ย่อย เช่น Header, MatchCard, PredictionModal
-- `/src/pages`: หน้าหลักต่างๆ เช่น Home, Matches, Leaderboard
-- `/src/data`: ข้อมูล Mock Data (mockMatches, mockUsers)
-- `/src/utils`: ฟังก์ชันเสริม เช่น ระบบคำนวณคะแนน
-- `/src/context`: AppContext จัดการ Global State
+## 📂 Project Structure
+- `/src/components`: UI components including `AdminLayout` and `CustomerLayout`
+- `/src/context`: `AppContext.jsx` handling state, mock data, and auto-calculation logic
+- `/src/pages/customer`: Front Office pages (`MatchPrediction`, `MyAnswers`, etc.)
+- `/src/pages/admin`: Back Office pages (`AdminDashboard`, `MatchManager`, `QuestionManager`)
+- `/src/data`: Mock data simulation (`mockData.js`)
 
-## การติดตั้งและใช้งาน (Installation)
+## 🚀 How to Run
+1. Install dependencies:
+   ```bash
+   npm install
+   ```
+2. Start development server:
+   ```bash
+   npm run dev
+   ```
+3. Open `http://localhost:5173` in your browser.
 
-1. ติดตั้ง Dependencies:
-```bash
-npm install
-```
-
-2. รัน Local Development Server:
-```bash
-npm run dev
-```
-
-ระบบจะเปิดใช้งานที่ `http://localhost:5173`
+## 🔮 Future Backend Integration Plan
+- Replace `localStorage` with API calls to U-WorldCup Backend.
+- Integrate with `www.api-football.com` for real-time fixtures, live scores, lineups, and automated match result processing.
+- Authentication: External API token validation for user login.

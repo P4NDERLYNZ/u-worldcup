@@ -1,102 +1,137 @@
 import React, { createContext, useState, useEffect } from 'react';
-import { mockMatches, mockUsers } from '../data/mockData';
-import { calculatePredictionScore } from '../utils/scoringRules';
+import { mockMatches, mockQuestions, mockUsers, mockUserAnswers } from '../data/mockData';
 
 export const AppContext = createContext();
 
 export const AppProvider = ({ children }) => {
+  // --- State Initialization ---
   const [matches, setMatches] = useState(() => {
-    const saved = localStorage.getItem('uworldcup_matches');
+    const saved = localStorage.getItem('uworldcup_matches_v2');
     return saved ? JSON.parse(saved) : mockMatches;
   });
 
-  const [predictions, setPredictions] = useState(() => {
-    const saved = localStorage.getItem('uworldcup_predictions');
-    return saved ? JSON.parse(saved) : [];
+  const [questions, setQuestions] = useState(() => {
+    const saved = localStorage.getItem('uworldcup_questions_v2');
+    return saved ? JSON.parse(saved) : mockQuestions;
+  });
+
+  const [userAnswers, setUserAnswers] = useState(() => {
+    const saved = localStorage.getItem('uworldcup_answers_v2');
+    return saved ? JSON.parse(saved) : mockUserAnswers;
   });
 
   const [users, setUsers] = useState(() => {
-    const saved = localStorage.getItem('uworldcup_users');
+    const saved = localStorage.getItem('uworldcup_users_v2');
     return saved ? JSON.parse(saved) : mockUsers;
   });
 
-  const currentUser = { id: 1, username: "Player_One" }; // Mock logged in user
-  const [isAdmin, setIsAdmin] = useState(false);
+  // --- Mock Authentication & Roles ---
+  const [role, setRole] = useState('customer'); // 'customer' or 'admin'
+  const currentUser = users.find(u => u.id === 1);
 
+  // --- Persistence ---
   useEffect(() => {
-    localStorage.setItem('uworldcup_matches', JSON.stringify(matches));
-  }, [matches]);
+    localStorage.setItem('uworldcup_matches_v2', JSON.stringify(matches));
+    localStorage.setItem('uworldcup_questions_v2', JSON.stringify(questions));
+    localStorage.setItem('uworldcup_answers_v2', JSON.stringify(userAnswers));
+    localStorage.setItem('uworldcup_users_v2', JSON.stringify(users));
+  }, [matches, questions, userAnswers, users]);
 
-  useEffect(() => {
-    localStorage.setItem('uworldcup_predictions', JSON.stringify(predictions));
-  }, [predictions]);
-
-  useEffect(() => {
-    localStorage.setItem('uworldcup_users', JSON.stringify(users));
-  }, [users]);
-
-  const addPrediction = (matchId, homeScore, awayScore) => {
+  // --- Customer Functions ---
+  const submitAnswer = (matchId, questionId, answerValue) => {
     const match = matches.find(m => m.id === matchId);
     if (!match || match.status !== 'Open') return false;
 
-    const newPrediction = {
-      id: Date.now(),
-      userId: currentUser.id,
-      matchId,
-      homeScore: parseInt(homeScore),
-      awayScore: parseInt(awayScore),
-      scoreEarned: null, // Will be calculated when match finishes
-      status: 'Waiting Result'
-    };
-
-    setPredictions(prev => {
-      // remove old prediction for this match if exists
-      const filtered = prev.filter(p => p.matchId !== matchId);
-      return [...filtered, newPrediction];
+    setUserAnswers(prev => {
+      // Remove old answer for this specific question by this user
+      const filtered = prev.filter(a => !(a.userId === currentUser.id && a.questionId === questionId));
+      
+      const newAnswer = {
+        id: Date.now() + Math.random(),
+        userId: currentUser.id,
+        matchId,
+        questionId,
+        answer: answerValue,
+        isCorrect: null,
+        pointEarned: 0,
+        status: 'Waiting Result',
+        submittedAt: new Date().toISOString()
+      };
+      return [...filtered, newAnswer];
     });
-    
     return true;
   };
 
+  // --- Admin Functions ---
   const updateMatchAdmin = (matchId, updates) => {
     setMatches(prev => prev.map(m => m.id === matchId ? { ...m, ...updates } : m));
   };
 
-  const recalculateScores = () => {
-    // 1. Calculate prediction scores based on finished matches
-    const updatedPredictions = predictions.map(p => {
-      const match = matches.find(m => m.id === p.matchId);
-      if (match && match.status === 'Finished') {
-        const score = calculatePredictionScore(p, match);
-        let status = 'Wrong';
-        if (score === 3) status = 'Correct Score';
-        if (score === 1) status = 'Correct Winner';
-        return { ...p, scoreEarned: score, status };
-      }
-      return p;
-    });
-    setPredictions(updatedPredictions);
+  const createQuestion = (questionData) => {
+    setQuestions(prev => [...prev, { id: Date.now(), ...questionData }]);
+  };
 
-    // 2. Update users total score
-    const updatedUsers = users.map(u => {
-      // Mock calculation for Player_One only, others are static for demo
-      if (u.id === currentUser.id) {
-        const userPreds = updatedPredictions.filter(p => p.userId === u.id);
-        const totalScore = userPreds.reduce((sum, p) => sum + (p.scoreEarned || 0), 0);
-        return { ...u, totalScore, predictionsCount: userPreds.length };
+  const updateQuestion = (questionId, updates) => {
+    setQuestions(prev => prev.map(q => q.id === questionId ? { ...q, ...updates } : q));
+  };
+
+  const deleteQuestion = (questionId) => {
+    setQuestions(prev => prev.filter(q => q.id !== questionId));
+  };
+
+  // Auto-Calculate function
+  const setCorrectAnswerAndCalculate = (questionId, correctAnswer) => {
+    // 1. Update the question with the correct answer
+    let targetQuestion = null;
+    setQuestions(prev => prev.map(q => {
+      if (q.id === questionId) {
+        targetQuestion = { ...q, correctAnswer };
+        return targetQuestion;
       }
-      return u;
+      return q;
+    }));
+
+    if (!targetQuestion) return;
+
+    // 2. Evaluate all user answers for this question
+    let updatedAnswersList = [];
+    setUserAnswers(prev => {
+      const newAnswers = prev.map(ans => {
+        if (ans.questionId === questionId) {
+          // Check correctness
+          const isCorrect = String(ans.answer).toLowerCase().trim() === String(correctAnswer).toLowerCase().trim();
+          const pointEarned = isCorrect ? targetQuestion.point : 0;
+          return { ...ans, isCorrect, pointEarned, status: isCorrect ? 'Correct' : 'Wrong' };
+        }
+        return ans;
+      });
+      updatedAnswersList = newAnswers;
+      return newAnswers;
     });
-    setUsers(updatedUsers);
+
+    // 3. Recalculate Total Scores for all users
+    setUsers(prevUsers => {
+      return prevUsers.map(user => {
+        // Find all answers for this user
+        const userAns = updatedAnswersList.filter(a => a.userId === user.id);
+        const totalScore = userAns.reduce((sum, a) => sum + (a.pointEarned || 0), 0);
+        return { ...user, totalScore };
+      });
+    });
   };
 
   return (
     <AppContext.Provider value={{
       matches, setMatches,
-      predictions, addPrediction,
-      users, currentUser,
-      isAdmin, setIsAdmin,
-      updateMatchAdmin, recalculateScores
+      questions, setQuestions,
+      userAnswers, setUserAnswers,
+      users, setUsers,
+      currentUser,
+      role, setRole,
+      submitAnswer,
+      updateMatchAdmin,
+      createQuestion, updateQuestion, deleteQuestion,
+      setCorrectAnswerAndCalculate
     }}>
       {children}
     </AppContext.Provider>
