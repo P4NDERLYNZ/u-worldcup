@@ -1,0 +1,27 @@
+@import "tailwindcss";
+
+@theme {
+  --color-primary: #D4AF37; /* Gold */
+  --color-primary-dark: #AA8B2C;
+  --color-background: #0B0E14; /* Very Dark Navy/Black */
+  --color-card: #151A22; /* Dark Navy for cards */
+  --color-surface: #1E2530; /* Lighter surface */
+  --color-text-main: #F3F4F6;
+  --color-text-muted: #9CA3AF;
+  --color-success: #10B981;
+  --color-danger: #EF4444;
+}
+
+body {
+  background-color: var(--color-background);
+  color: var(--color-text-main);
+  font-family: system-ui, -apple-system, sans-serif;
+  margin: 0;
+  padding: 0;
+}
+
+.glass-card {
+  background: rgba(21, 26, 34, 0.7);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+}
