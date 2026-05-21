@@ -1,13 +1,13 @@
 @import "tailwindcss";
 
 @theme {
-  --color-primary: #D8FF00; /* Neon Yellow/Green from template */
-  --color-primary-dark: #AACC00;
-  --color-background: #111A16; /* Deep Forest Green */
-  --color-card: #1A251F; /* Dark Green Card */
-  --color-surface: #223028; /* Lighter Green Surface */
+  --color-primary: #F5D061; /* Luxurious Champagne Gold */
+  --color-primary-dark: #C29323;
+  --color-background: #050505; /* Deep Obsidian Black */
+  --color-card: #0F0E0B; /* Gold-tinted Black Card */
+  --color-surface: #1B1914; /* Lighter gold-tinted surface */
   --color-text-main: #FFFFFF;
-  --color-text-muted: #8E9A95;
+  --color-text-muted: #9E968A; /* Gold-tinted muted text */
   --color-success: #10B981;
   --color-danger: #EF4444;
 }
@@ -19,26 +19,24 @@ body {
   margin: 0;
   padding: 0;
   -webkit-font-smoothing: antialiased;
+  min-height: 100vh;
 }
 
-/* Premium Utilities */
-.glass-panel {
-  background: var(--color-card);
-  border: 1px solid rgba(255, 255, 255, 0.05);
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+/* Premium Gold Spotlight (Aura Effect) & Utilities */
+.spotlight-bg {
+  background: radial-gradient(ellipse 80% 60% at 50% 0%, rgba(245, 208, 97, 0.14) 0%, rgba(5, 5, 5, 0) 100%), #050505;
+  background-attachment: fixed;
 }
 
-.primary-gradient-bg {
-  background: linear-gradient(135deg, #D8FF00 0%, #AACC00 100%);
+.glass-card {
+  background-color: rgba(15, 14, 11, 0.75);
+  backdrop-filter: blur(16px);
+  border: 1px solid rgba(255, 255, 255, 0.03);
 }
 
-.card-hover-effect {
-  transition: all 0.3s ease;
-}
-
-.card-hover-effect:hover {
-  transform: translateY(-2px);
-  border-color: rgba(216, 255, 0, 0.3);
+.border-glow-active {
+  border-color: var(--color-primary);
+  box-shadow: 0 0 15px rgba(245, 208, 97, 0.25);
 }
 
 /* Custom Scrollbar */
@@ -54,5 +52,83 @@ body {
   border-radius: 10px;
 }
 ::-webkit-scrollbar-thumb:hover {
-  background: var(--color-primary-dark);
+  background: var(--color-primary);
+}
+
+/* Custom Hide Scrollbar */
+.scrollbar-hide::-webkit-scrollbar {
+  display: none;
+}
+.scrollbar-hide {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+/* Premium Date and Time Picker Styles */
+input[type="date"],
+input[type="time"] {
+  color-scheme: dark; /* Enables native dark mode popups */
+}
+
+input[type="date"]::-webkit-calendar-picker-indicator,
+input[type="time"]::-webkit-calendar-picker-indicator {
+  filter: invert(85%) sepia(35%) saturate(800%) hue-rotate(355deg) brightness(105%) contrast(92%); /* Gold #F5D061 tint */
+  cursor: pointer;
+  opacity: 0.75;
+  transition: all 0.2s ease-in-out;
+}
+
+input[type="date"]::-webkit-calendar-picker-indicator:hover,
+input[type="time"]::-webkit-calendar-picker-indicator:hover {
+  opacity: 1;
+  transform: scale(1.1);
+}
+
+/* Gold Glow / Aura animations */
+@keyframes goldPulse {
+  0%, 100% {
+    box-shadow: 0 0 15px rgba(245, 208, 97, 0.2), 0 0 5px rgba(245, 208, 97, 0.1);
+  }
+  50% {
+    box-shadow: 0 0 25px rgba(245, 208, 97, 0.45), 0 0 12px rgba(245, 208, 97, 0.2);
+  }
+}
+
+.gold-aura {
+  animation: goldPulse 3s infinite ease-in-out;
+}
+
+/* Luxurious Gold Gradients (Mapped to bronze prefix for retro-compatibility) */
+.bronze-gradient-text,
+.gold-gradient-text {
+  background: linear-gradient(135deg, #FFF6D6 0%, #F5D061 40%, #E6B53B 70%, #A37A1A 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.bronze-gradient-bg,
+.gold-gradient-bg {
+  background: linear-gradient(135deg, #FFF6D6 0%, #F5D061 40%, #E6B53B 70%, #A37A1A 100%);
+}
+
+.btn-bronze,
+.btn-gold {
+  background: linear-gradient(135deg, #FFF6D6 0%, #F5D061 40%, #E6B53B 70%, #A37A1A 100%) !important;
+  color: #050505 !important;
+  font-weight: 900 !important;
+  box-shadow: 0 0 15px rgba(245, 208, 97, 0.25), 0 4px 15px rgba(0, 0, 0, 0.4) !important;
+  transition: all 0.3s ease-in-out !important;
+  border: 1px solid rgba(255, 255, 255, 0.15) !important;
+}
+
+.btn-bronze:hover,
+.btn-gold:hover {
+  background: linear-gradient(135deg, #FFFFFF 0%, #FFDF7A 40%, #F5C647 70%, #B88E28 100%) !important;
+  box-shadow: 0 0 25px rgba(245, 208, 97, 0.45), 0 6px 20px rgba(0, 0, 0, 0.5) !important;
+  transform: translateY(-1px) !important;
+}
+
+.btn-bronze:active,
+.btn-gold:active {
+  transform: translateY(1px) !important;
 }

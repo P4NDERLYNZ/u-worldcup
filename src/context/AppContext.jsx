@@ -26,7 +26,10 @@ export const AppProvider = ({ children }) => {
   });
 
   // --- Mock Authentication & Roles ---
-  const [role, setRole] = useState('customer'); // 'customer' or 'admin'
+  const [role, setRole] = useState(() => {
+    const saved = localStorage.getItem('uworldcup_role_v2');
+    return saved || 'customer';
+  });
   const currentUser = users.find(u => u.id === 1);
 
   // --- Persistence ---
@@ -36,6 +39,10 @@ export const AppProvider = ({ children }) => {
     localStorage.setItem('uworldcup_answers_v2', JSON.stringify(userAnswers));
     localStorage.setItem('uworldcup_users_v2', JSON.stringify(users));
   }, [matches, questions, userAnswers, users]);
+
+  useEffect(() => {
+    localStorage.setItem('uworldcup_role_v2', role);
+  }, [role]);
 
   // --- Customer Functions ---
   const submitAnswer = (matchId, questionId, answerValue) => {

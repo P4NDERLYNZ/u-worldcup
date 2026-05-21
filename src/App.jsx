@@ -6,7 +6,7 @@ import AdminLayout from './components/AdminLayout';
 // Customer Pages
 import Home from './pages/Home';
 import Matches from './pages/Matches';
-import MyPredictions from './pages/MyPredictions';
+import MyAnswers from './pages/customer/MyAnswers';
 import Leaderboard from './pages/Leaderboard';
 import MatchPrediction from './pages/customer/MatchPrediction';
 
@@ -25,7 +25,8 @@ function App() {
             <Route index element={<Home />} />
             <Route path="matches" element={<Matches />} />
             <Route path="matches/:matchId" element={<MatchPrediction />} />
-            <Route path="my-answers" element={<MyPredictions />} />
+            <Route path="predict/:matchId" element={<MatchPrediction />} />
+            <Route path="my-answers" element={<MyAnswers />} />
             <Route path="leaderboard" element={<Leaderboard />} />
           </Route>
 
