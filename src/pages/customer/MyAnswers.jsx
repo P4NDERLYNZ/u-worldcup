@@ -1,6 +1,7 @@
 import { useContext } from 'react';
 import { AppContext } from '../../context/AppContext';
 import { CheckCircle2, AlertCircle, Clock } from 'lucide-react';
+import { FlagImage } from '../../utils/flagHelper';
 
 const MyAnswers = () => {
   const { userAnswers, questions, matches, currentUser } = useContext(AppContext);
@@ -42,8 +43,10 @@ const MyAnswers = () => {
 
                 {/* Match Info & Status */}
                 <div className="flex justify-between items-center mb-3.5 border-b border-white/5 pb-3">
-                  <span className="text-[10px] font-black text-white uppercase tracking-wider pl-2">
-                    {match.homeFlag} {match.homeTeam} vs {match.awayTeam} {match.awayFlag}
+                  <span className="text-[10px] font-black text-white uppercase tracking-wider pl-2 flex items-center gap-2">
+                    <FlagImage flag={match.homeFlag} countryName={match.homeTeam} className="w-5 h-3.5 inline-block object-cover rounded-sm" />
+                    <span>{match.homeTeam} vs {match.awayTeam}</span>
+                    <FlagImage flag={match.awayFlag} countryName={match.awayTeam} className="w-5 h-3.5 inline-block object-cover rounded-sm" />
                   </span>
                   
                   {ans.status === 'Correct' ? (

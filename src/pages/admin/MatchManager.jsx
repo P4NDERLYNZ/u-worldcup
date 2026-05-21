@@ -1,7 +1,8 @@
 import { useContext } from 'react';
 import { AppContext } from '../../context/AppContext';
 import { Link } from 'react-router-dom';
-import { Settings, Plus, Trophy, ChevronRight } from 'lucide-react';
+import { Settings, Plus, ChevronRight } from 'lucide-react';
+import { FlagImage } from '../../utils/flagHelper';
 
 const MatchManager = () => {
   const { matches, updateMatchAdmin } = useContext(AppContext);
@@ -23,67 +24,83 @@ const MatchManager = () => {
 
       <div className="space-y-4">
         {matches.map(match => {
-          const isOpen = match.status === 'Open';
-          const isLocked = match.status === 'Locked';
-
           return (
             <div 
               key={match.id} 
-              className="bg-[var(--color-card)]/80 border border-white/5 rounded-[28px] p-6 flex flex-col lg:flex-row justify-between items-center gap-6 shadow-xl hover:border-white/10 transition-all duration-300"
+              className="bg-[var(--color-card)]/80 border border-white/5 rounded-xl shadow-xl hover:border-white/10 transition-all duration-300 overflow-hidden"
             >
-              {/* Match description */}
-              <div className="flex items-center gap-5 flex-1 w-full justify-center lg:justify-start">
-                <span className="text-3xl filter drop-shadow">{match.homeFlag}</span>
-                <span className="font-extrabold text-white text-base text-right min-w-[80px] truncate">{match.homeTeam}</span>
-                <span className="text-xs text-[var(--color-text-muted)] font-black uppercase bg-[var(--color-surface)] border border-white/5 px-2.5 py-1 rounded-full">VS</span>
-                <span className="font-extrabold text-white text-base min-w-[80px] truncate">{match.awayTeam}</span>
-                <span className="text-3xl filter drop-shadow">{match.awayFlag}</span>
-              </div>
-
-              {/* Match Controls */}
-              <div className="flex flex-wrap items-center gap-4 w-full lg:w-auto justify-center lg:justify-end">
-                <div className="flex items-center gap-2 bg-[var(--color-background)] px-3 py-1.5 rounded-xl border border-white/5">
-                  <span className="text-[10px] font-black text-[var(--color-text-muted)] uppercase tracking-wider pl-1">สถานะ:</span>
-                  <select 
-                    value={match.status}
-                    onChange={(e) => updateMatchAdmin(match.id, { status: e.target.value })}
-                    className="bg-transparent border-0 text-xs font-black text-white focus:outline-none focus:ring-0 cursor-pointer pr-4 uppercase tracking-wider"
-                  >
-                    <option value="Open" className="bg-[var(--color-background)] text-white">เปิดทายผล (Open)</option>
-                    <option value="Locked" className="bg-[var(--color-background)] text-white">ปิดรับคำตอบ (Locked)</option>
-                    <option value="Finished" className="bg-[var(--color-background)] text-white">จบแมตช์แล้ว (Finished)</option>
-                  </select>
+              {/* Main Card Body */}
+              <div className="p-4 md:p-5 flex flex-col lg:flex-row justify-between items-center gap-4">
+                {/* Match description: Flags and Teams */}
+                <div className="flex items-center justify-center lg:justify-start gap-4 flex-1 w-full">
+                  <div className="flex items-center gap-3 justify-end w-[42%]">
+                    <span className="font-extrabold text-white text-sm sm:text-base truncate">{match.homeTeam}</span>
+                    <FlagImage flag={match.homeFlag} countryName={match.homeTeam} className="w-8 h-5.5 sm:w-10 sm:h-7 flex-shrink-0" />
+                  </div>
+                  
+                  <span className="text-[10px] text-[var(--color-text-muted)] font-black bg-[var(--color-surface)] border border-white/5 px-2.5 py-1 rounded-full shadow-inner flex-shrink-0">VS</span>
+                  
+                  <div className="flex items-center gap-3 justify-start w-[42%]">
+                    <FlagImage flag={match.awayFlag} countryName={match.awayTeam} className="w-8 h-5.5 sm:w-10 sm:h-7 flex-shrink-0" />
+                    <span className="font-extrabold text-white text-sm sm:text-base truncate">{match.awayTeam}</span>
+                  </div>
                 </div>
 
-                {/* Prediction Open Date & Time Fields */}
-                <div className="flex flex-col gap-1.5 bg-[var(--color-card)]/50 px-3.5 py-3 rounded-2xl border border-white/5 min-w-[270px]">
-                  <span className="text-[9px] font-black text-[var(--color-primary)] uppercase tracking-widest pl-1 flex items-center gap-1.5">
-                    <span>⏳</span> ตั้งเวลาเปิดให้ลูกค้าทายผล
-                  </span>
-                  <div className="flex gap-2">
+                {/* Match Actions */}
+                <div className="flex flex-row flex-wrap sm:flex-nowrap items-center justify-center lg:justify-end gap-3 w-full lg:w-auto">
+                  {/* Status Select */}
+                  <div className="flex items-center gap-1.5 bg-[var(--color-background)] px-2.5 py-1.5 rounded-lg border border-white/5">
+                    <span className="text-[9px] font-black text-[var(--color-text-muted)] uppercase tracking-wider pl-0.5">สถานะ:</span>
+                    <select 
+                      value={match.status}
+                      onChange={(e) => updateMatchAdmin(match.id, { status: e.target.value })}
+                      className="bg-transparent border-0 text-[10px] font-black text-white focus:outline-none focus:ring-0 cursor-pointer pr-4 uppercase tracking-wider p-0"
+                    >
+                      <option value="Open" className="bg-[var(--color-background)] text-white">เปิดทายผล (Open)</option>
+                      <option value="Locked" className="bg-[var(--color-background)] text-white">ปิดรับคำตอบ (Locked)</option>
+                      <option value="Finished" className="bg-[var(--color-background)] text-white">จบแมตช์แล้ว (Finished)</option>
+                    </select>
+                  </div>
+
+                  {/* Manage Questions Button */}
+                  <Link 
+                    to={`/admin/matches/${match.id}/questions`}
+                    className="bg-white/5 hover:bg-white/10 border border-white/10 text-white text-[10px] font-black px-3.5 py-2 rounded-lg flex items-center gap-1.5 transition-all duration-300 uppercase tracking-wider active:scale-95 whitespace-nowrap"
+                  >
+                    <Settings size={11} className="text-[var(--color-primary)]" />
+                    <span>จัดการคำถาม & เฉลยผลคะแนน</span>
+                    <ChevronRight size={11} />
+                  </Link>
+                </div>
+              </div>
+
+              {/* Card Footer (Subtle Scheduler bar) */}
+              <div className="bg-[var(--color-background)]/40 border-t border-white/5 px-4 md:px-5 py-2 flex flex-col sm:flex-row sm:items-center justify-between gap-2.5">
+                <span className="text-[9px] font-black text-[var(--color-primary)] uppercase tracking-widest flex items-center gap-1.5">
+                  <span className="text-xs">⏳</span> ตั้งเวลาเปิดให้ลูกค้าทายผล
+                </span>
+                
+                <div className="flex gap-2">
+                  <div className="flex items-center gap-1.5">
+                    <span className="text-[8px] font-bold text-[var(--color-text-muted)] uppercase">วันที่:</span>
                     <input 
                       type="date" 
                       value={match.predictionOpenDate || ''}
                       onChange={(e) => updateMatchAdmin(match.id, { predictionOpenDate: e.target.value })}
-                      className="bg-[var(--color-background)] border border-white/10 focus:border-[var(--color-primary)] focus:shadow-[0_0_10px_rgba(209,161,83,0.15)] rounded-xl px-3 py-2 text-xs text-white focus:outline-none transition-all font-bold flex-1 cursor-pointer"
+                      className="bg-[var(--color-background)] border border-white/10 focus:border-[var(--color-primary)] focus:shadow-[0_0_8px_rgba(209,161,83,0.15)] rounded px-2 py-1 text-[9px] text-white focus:outline-none transition-all font-bold cursor-pointer"
                     />
+                  </div>
+                  
+                  <div className="flex items-center gap-1.5">
+                    <span className="text-[8px] font-bold text-[var(--color-text-muted)] uppercase">เวลา:</span>
                     <input 
                       type="time" 
                       value={match.predictionOpenTime || ''}
                       onChange={(e) => updateMatchAdmin(match.id, { predictionOpenTime: e.target.value })}
-                      className="bg-[var(--color-background)] border border-white/10 focus:border-[var(--color-primary)] focus:shadow-[0_0_10px_rgba(209,161,83,0.15)] rounded-xl px-3 py-2 text-xs text-white focus:outline-none transition-all font-bold w-24 cursor-pointer"
+                      className="bg-[var(--color-background)] border border-white/10 focus:border-[var(--color-primary)] focus:shadow-[0_0_8px_rgba(209,161,83,0.15)] rounded px-2 py-1 text-[9px] text-white focus:outline-none transition-all font-bold cursor-pointer w-18"
                     />
                   </div>
                 </div>
-
-                <Link 
-                  to={`/admin/matches/${match.id}/questions`}
-                  className="bg-white/5 hover:bg-white/10 border border-white/10 text-white text-xs font-black px-5 py-2.5 rounded-full flex items-center gap-1.5 transition-all duration-300 uppercase tracking-wider active:scale-95"
-                >
-                  <Settings size={12} className="text-[var(--color-primary)]" />
-                  <span>จัดการคำถาม & เฉลยผลคะแนน</span>
-                  <ChevronRight size={12} />
-                </Link>
               </div>
             </div>
           );

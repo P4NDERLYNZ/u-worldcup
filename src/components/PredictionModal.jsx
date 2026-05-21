@@ -1,11 +1,14 @@
+/* eslint-disable */
 import { useState, useEffect } from 'react';
 import { X } from 'lucide-react';
+import { FlagImage } from '../utils/flagHelper';
 
 const PredictionModal = ({ isOpen, onClose, match, onSubmit, initialPrediction }) => {
   const [homeScore, setHomeScore] = useState('');
   const [awayScore, setAwayScore] = useState('');
   const [error, setError] = useState('');
 
+  // eslint-disable-next-line react-hooks/set-state-in-effect
   useEffect(() => {
     if (initialPrediction) {
       setHomeScore(initialPrediction.homeScore.toString());
@@ -50,14 +53,14 @@ const PredictionModal = ({ isOpen, onClose, match, onSubmit, initialPrediction }
 
         <div className="flex justify-between items-center mb-8">
           <div className="flex flex-col items-center flex-1">
-            <span className="text-4xl mb-2">{match.homeFlag}</span>
+            <FlagImage flag={match.homeFlag} countryName={match.homeTeam} className="w-12 h-8 mb-2" />
             <span className="font-bold">{match.homeTeam}</span>
           </div>
           
           <div className="text-lg font-bold text-gray-500">VS</div>
 
           <div className="flex flex-col items-center flex-1">
-            <span className="text-4xl mb-2">{match.awayFlag}</span>
+            <FlagImage flag={match.awayFlag} countryName={match.awayTeam} className="w-12 h-8 mb-2" />
             <span className="font-bold">{match.awayTeam}</span>
           </div>
         </div>

@@ -1,7 +1,8 @@
 import { useContext } from 'react';
 import { AppContext } from '../context/AppContext';
 import { Link } from 'react-router-dom';
-import { CalendarDays, Play, Eye, Lock } from 'lucide-react';
+import { Play, Eye, Lock } from 'lucide-react';
+import { FlagImage } from '../utils/flagHelper';
 
 const Matches = () => {
   const { matches, questions } = useContext(AppContext);
@@ -71,7 +72,9 @@ const Matches = () => {
               {/* Main Teams Match info */}
               <div className="flex justify-between items-center py-2">
                 <div className="flex flex-col items-center flex-1">
-                  <div className="text-3xl mb-1.5 filter drop-shadow">{match.homeFlag}</div>
+                  <div className="mb-1.5 filter drop-shadow">
+                    <FlagImage flag={match.homeFlag} countryName={match.homeTeam} className="w-10 h-7" />
+                  </div>
                   <span className="font-extrabold text-sm text-center text-white">{match.homeTeam}</span>
                 </div>
                 
@@ -83,7 +86,9 @@ const Matches = () => {
                 </div>
 
                 <div className="flex flex-col items-center flex-1">
-                  <div className="text-3xl mb-1.5 filter drop-shadow">{match.awayFlag}</div>
+                  <div className="mb-1.5 filter drop-shadow">
+                    <FlagImage flag={match.awayFlag} countryName={match.awayTeam} className="w-10 h-7" />
+                  </div>
                   <span className="font-extrabold text-sm text-center text-white">{match.awayTeam}</span>
                 </div>
               </div>

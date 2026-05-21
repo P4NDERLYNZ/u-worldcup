@@ -1,4 +1,5 @@
-import { Clock, Calendar, Users, Trophy } from 'lucide-react';
+import { Trophy } from 'lucide-react';
+import { FlagImage } from '../utils/flagHelper';
 
 const MatchCard = ({ match, onPredictClick, userPrediction }) => {
   return (
@@ -33,8 +34,8 @@ const MatchCard = ({ match, onPredictClick, userPrediction }) => {
       {/* Main Score Area */}
       <div className="flex justify-between items-center my-6 relative">
         <div className="flex flex-col items-center flex-1 z-10">
-          <div className="w-20 h-20 rounded-full bg-[#1A1E1C] flex items-center justify-center text-5xl mb-4 shadow-[inset_0_4px_20px_rgba(0,0,0,0.5)] border border-white/5">
-            {match.homeFlag}
+          <div className="w-20 h-20 rounded-full bg-[#1A1E1C] flex items-center justify-center text-5xl mb-4 shadow-[inset_0_4px_20px_rgba(0,0,0,0.5)] border border-white/5 overflow-hidden">
+            <FlagImage flag={match.homeFlag} countryName={match.homeTeam} className="w-14 h-9 sm:w-16 sm:h-11" />
           </div>
           <span className="font-extrabold text-base tracking-widest uppercase text-white">{match.homeTeam}</span>
         </div>
@@ -55,8 +56,8 @@ const MatchCard = ({ match, onPredictClick, userPrediction }) => {
         </div>
 
         <div className="flex flex-col items-center flex-1 z-10">
-          <div className="w-20 h-20 rounded-full bg-[#1A1E1C] flex items-center justify-center text-5xl mb-4 shadow-[inset_0_4px_20px_rgba(0,0,0,0.5)] border border-white/5">
-            {match.awayFlag}
+          <div className="w-20 h-20 rounded-full bg-[#1A1E1C] flex items-center justify-center text-5xl mb-4 shadow-[inset_0_4px_20px_rgba(0,0,0,0.5)] border border-white/5 overflow-hidden">
+            <FlagImage flag={match.awayFlag} countryName={match.awayTeam} className="w-14 h-9 sm:w-16 sm:h-11" />
           </div>
           <span className="font-extrabold text-base tracking-widest uppercase text-white">{match.awayTeam}</span>
         </div>

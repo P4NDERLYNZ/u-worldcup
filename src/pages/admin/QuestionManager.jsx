@@ -2,6 +2,7 @@ import { useState, useContext, useRef, useEffect } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { AppContext } from '../../context/AppContext';
 import { ArrowLeft, Check, Trash, Plus, X, Edit2, Save, Target, HelpCircle, ChevronDown } from 'lucide-react';
+import { FlagImage } from '../../utils/flagHelper';
 
 const tierOptions = [
   { value: 1, label: 'Tier 1 • พื้นฐาน (1 คะแนน)' },
@@ -324,8 +325,12 @@ const QuestionManager = () => {
           >
             <ArrowLeft size={12} /> กลับไปหน้าจัดการแมตช์
           </Link>
-          <h1 className="text-2xl md:text-3xl font-black text-white uppercase tracking-tight">
-            {match.homeFlag} {match.homeTeam} <span className="text-[var(--color-text-muted)] text-base font-medium font-serif italic lowercase">vs</span> {match.awayTeam} {match.awayFlag}
+          <h1 className="text-2xl md:text-3xl font-black text-white uppercase tracking-tight flex flex-wrap items-center gap-x-2 gap-y-1">
+            <FlagImage flag={match.homeFlag} countryName={match.homeTeam} className="w-8 h-5.5 flex-shrink-0" />
+            <span>{match.homeTeam}</span>
+            <span className="text-[var(--color-text-muted)] text-base font-medium font-serif italic lowercase">vs</span>
+            <span>{match.awayTeam}</span>
+            <FlagImage flag={match.awayFlag} countryName={match.awayTeam} className="w-8 h-5.5 flex-shrink-0" />
           </h1>
           <p className="text-xs bronze-gradient-text font-black uppercase tracking-wider mt-1.5">ตั้งค่าคำถามทายผลสำหรับแต่ละอันดับ (Tier)</p>
         </div>

@@ -1,7 +1,8 @@
 import { useState, useContext } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { AppContext } from '../../context/AppContext';
-import { ArrowLeft, CheckCircle2, Trophy, Clock } from 'lucide-react';
+import { ArrowLeft, CheckCircle2, Clock } from 'lucide-react';
+import { FlagImage } from '../../utils/flagHelper';
 
 const MatchPrediction = () => {
   const { matchId } = useParams();
@@ -95,11 +96,11 @@ const MatchPrediction = () => {
             {match.round}
           </span>
           <h1 className="text-2xl md:text-3xl font-black text-white uppercase tracking-tight flex items-center gap-3">
-            <span>{match.homeFlag}</span>
+            <FlagImage flag={match.homeFlag} countryName={match.homeTeam} className="w-10 h-7 flex-shrink-0" />
             <span>{match.homeTeam}</span>
             <span className="text-[var(--color-text-muted)] text-base font-medium font-serif italic lowercase">vs</span>
             <span>{match.awayTeam}</span>
-            <span>{match.awayFlag}</span>
+            <FlagImage flag={match.awayFlag} countryName={match.awayTeam} className="w-10 h-7 flex-shrink-0" />
           </h1>
           
           <div className="flex items-center gap-1.5 text-xs text-[var(--color-primary)] font-bold mt-3 bg-[var(--color-primary)]/10 px-3 py-1 rounded-full border border-[var(--color-primary)]/10">

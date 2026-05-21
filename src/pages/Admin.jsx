@@ -1,5 +1,6 @@
 import { useContext } from 'react';
 import { AppContext } from '../context/AppContext';
+import { FlagImage } from '../utils/flagHelper';
 
 const Admin = () => {
   const { matches, updateMatchAdmin, recalculateScores } = useContext(AppContext);
@@ -49,11 +50,11 @@ const Admin = () => {
               <tr key={match.id} className="border-b border-gray-800">
                 <td className="p-4">
                   <div className="flex items-center gap-2">
-                    <span className="text-xl">{match.homeFlag}</span>
+                    <FlagImage flag={match.homeFlag} countryName={match.homeTeam} className="w-6 h-4 flex-shrink-0" />
                     <span className="font-bold w-16 text-right truncate">{match.homeTeam}</span>
                     <span className="text-gray-500 text-xs">VS</span>
                     <span className="font-bold w-16 truncate">{match.awayTeam}</span>
-                    <span className="text-xl">{match.awayFlag}</span>
+                    <FlagImage flag={match.awayFlag} countryName={match.awayTeam} className="w-6 h-4 flex-shrink-0" />
                   </div>
                 </td>
                 <td className="p-4 text-sm text-gray-400">

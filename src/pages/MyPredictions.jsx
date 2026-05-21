@@ -1,6 +1,7 @@
 import { useContext } from 'react';
 import { AppContext } from '../context/AppContext';
 import clsx from 'clsx';
+import { FlagImage } from '../utils/flagHelper';
 
 const MyPredictions = () => {
   const { predictions, matches, currentUser } = useContext(AppContext);
@@ -45,15 +46,15 @@ const MyPredictions = () => {
                 </div>
                 
                 <div className="flex items-center gap-4">
-                  <div className="flex items-center gap-2 flex-1 justify-end">
+                  <div className="flex items-center gap-2.5 flex-1 justify-end">
                     <span className="font-bold">{match.homeTeam}</span>
-                    <span className="text-2xl">{match.homeFlag}</span>
+                    <FlagImage flag={match.homeFlag} countryName={match.homeTeam} className="w-8 h-5.5 flex-shrink-0" />
                   </div>
                   <div className="text-xl font-bold text-[var(--color-primary)]">
                     {pred.homeScore} - {pred.awayScore}
                   </div>
-                  <div className="flex items-center gap-2 flex-1 justify-start">
-                    <span className="text-2xl">{match.awayFlag}</span>
+                  <div className="flex items-center gap-2.5 flex-1 justify-start">
+                    <FlagImage flag={match.awayFlag} countryName={match.awayTeam} className="w-8 h-5.5 flex-shrink-0" />
                     <span className="font-bold">{match.awayTeam}</span>
                   </div>
                 </div>

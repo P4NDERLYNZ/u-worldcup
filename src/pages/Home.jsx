@@ -1,13 +1,13 @@
 import { useContext } from 'react';
 import { AppContext } from '../context/AppContext';
 import { Link } from 'react-router-dom';
-import { Trophy, ArrowRight, Play, CheckCircle } from 'lucide-react';
+import { ArrowRight, Play, CheckCircle } from 'lucide-react';
+import { FlagImage } from '../utils/flagHelper';
 
 const Home = () => {
-  const { matches, currentUser, users, questions } = useContext(AppContext);
+  const { matches, questions } = useContext(AppContext);
   
   const openMatches = matches.filter(m => m.status === 'Open' && questions.some(q => q.matchId === m.id));
-  const userStats = users.find(u => u.id === currentUser?.id) || { totalScore: 0 };
 
   return (
     <div className="space-y-8 pb-28">
@@ -96,14 +96,14 @@ const Home = () => {
                   )}
                 </div>
 
-                <div className="flex justify-between items-center py-2 relative z-10">
+                 <div className="flex justify-between items-center py-2 relative z-10">
                   <div className="flex items-center gap-3">
-                    <span className="text-2xl">{match.homeFlag || '⚽'}</span>
+                    <FlagImage flag={match.homeFlag} countryName={match.homeTeam} className="w-8 h-5.5 flex-shrink-0" />
                     <span className="text-base font-extrabold text-white group-hover:text-[var(--color-primary)] transition-colors">{match.homeTeam}</span>
                   </div>
                   <span className="text-xs text-[var(--color-text-muted)] font-black uppercase">VS</span>
                   <div className="flex items-center gap-3 flex-row-reverse">
-                    <span className="text-2xl">{match.awayFlag || '⚽'}</span>
+                    <FlagImage flag={match.awayFlag} countryName={match.awayTeam} className="w-8 h-5.5 flex-shrink-0" />
                     <span className="text-base font-extrabold text-white group-hover:text-[var(--color-primary)] transition-colors">{match.awayTeam}</span>
                   </div>
                 </div>
